@@ -8,8 +8,6 @@ import {
   FileText,
   Mail,
   Database,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 
 // Sidebar navigation configuration
@@ -52,11 +50,13 @@ const menuItems = [
 ];
 
 function Sidebar() {
-  // Controls whether the sidebar displays names or icons only
-  const [isOpen, setIsOpen] = useState(true);
+  // Sidebar starts collapsed and expands when the mouse enters
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <aside
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={`
         sticky
         top-0
@@ -70,10 +70,11 @@ function Sidebar() {
         transition-all
         duration-300
         ease-in-out
-        ${isOpen ? "w-72" : "w-20"}
+        shrink-0
+        ${isHovered ? "w-72" : "w-20"}
       `}
     >
-      {/* Profile information and sidebar toggle */}
+      {/* Profile information */}
       <div
         className={`
           h-20
@@ -82,11 +83,17 @@ function Sidebar() {
           border-b
           border-slate-800
           shrink-0
-          ${isOpen ? "px-5 justify-between" : "px-3 justify-between"}
+          transition-all
+          duration-300
+          ${
+            isHovered
+              ? "px-5 justify-start"
+              : "px-3 justify-center"
+          }
         `}
       >
         {/* Developer name and professional title */}
-        {isOpen ? (
+        {isHovered ? (
           <div className="min-w-0">
             <h1 className="text-lg font-bold tracking-wide text-white truncate">
               Anjireddy Medam
@@ -101,38 +108,19 @@ function Sidebar() {
             AM
           </div>
         )}
-
-        {/* Sidebar collapse and expand button */}
-        <button
-          type="button"
-          onClick={() => setIsOpen((previousState) => !previousState)}
-          title={isOpen ? "Collapse sidebar" : "Expand sidebar"}
-          aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
-          className="
-            w-9
-            h-9
-            flex
-            items-center
-            justify-center
-            rounded-lg
-            text-slate-400
-            hover:text-white
-            hover:bg-slate-800
-            transition-colors
-            duration-200
-            shrink-0
-          "
-        >
-          {isOpen ? (
-            <ChevronLeft size={19} />
-          ) : (
-            <ChevronRight size={19} />
-          )}
-        </button>
       </div>
 
       {/* Main sidebar navigation */}
-      <nav className="flex-1 p-4 space-y-2">
+      <nav
+        className={`
+          flex-1
+          p-4
+          space-y-2
+          transition-all
+          duration-300
+          ${isHovered ? "" : "px-3"}
+        `}
+      >
         {menuItems.map((item) => {
           const Icon = item.icon;
 
@@ -140,7 +128,7 @@ function Sidebar() {
             <NavLink
               key={item.name}
               to={item.path}
-              title={!isOpen ? item.name : undefined}
+              title={!isHovered ? item.name : undefined}
               className={({ isActive }) => `
                 flex
                 items-center
@@ -152,7 +140,7 @@ function Sidebar() {
                 transition-all
                 duration-200
                 ${
-                  isOpen
+                  isHovered
                     ? "justify-start"
                     : "justify-center"
                 }
@@ -179,8 +167,8 @@ function Sidebar() {
                 className="shrink-0"
               />
 
-              {/* Menu name is hidden when sidebar is collapsed */}
-              {isOpen && (
+              {/* Menu name */}
+              {isHovered && (
                 <span className="text-sm font-medium whitespace-nowrap">
                   {item.name}
                 </span>

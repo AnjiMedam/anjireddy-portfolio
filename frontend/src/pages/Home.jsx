@@ -1,6 +1,6 @@
 import {
   ArrowRight,
-  Download,
+  Eye,
   BriefcaseBusiness,
   Database,
   Code2,
@@ -221,8 +221,10 @@ function Home() {
                 <ArrowRight size={18} />
               </Link>
 
-              <button
-                type="button"
+              <a
+                href={`${import.meta.env.BASE_URL}resume.pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="
                   inline-flex
                   items-center
@@ -242,10 +244,10 @@ function Home() {
                   hover:bg-white/10
                 "
               >
-                Download Resume
+                View Resume
 
-                <Download size={18} />
-              </button>
+                <Eye size={18} />
+              </a>
 
             </div>
 
